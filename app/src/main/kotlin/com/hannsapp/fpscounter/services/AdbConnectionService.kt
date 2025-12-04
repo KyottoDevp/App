@@ -88,7 +88,7 @@ class AdbConnectionService : Service() {
     }
 
     private fun initializeShell() {
-        if (!Shell.isAppGrantedRoot()) {
+        if (Shell.isAppGrantedRoot() != true) {
             Log.d(TAG, "Root access not available, using standard shell")
         }
     }
