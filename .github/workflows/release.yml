@@ -16,7 +16,7 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # Pega histórico completo (útil para versionamento)
+          fetch-depth: 0   # Pega histórico completo
 
       # -----------------------------
       # 2. Instalação do JDK
@@ -26,7 +26,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          cache: gradle   # Habilita cache para builds mais rápidos
+          cache: gradle
 
       # -----------------------------
       # 3. Instalação do Android SDK
@@ -49,7 +49,7 @@ jobs:
       # 4. Build do APK Release
       # -----------------------------
       - name: Build APK Release
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleRelease --stacktrace --info
 
       # -----------------------------
       # 5. Assinatura do APK
@@ -67,7 +67,9 @@ jobs:
             ${{ secrets.KEY_ALIAS }}
 
           # Alinha o APK para otimização
-          zipalign -v -p 4 app/build/outputs/apk/release/app-release-unsigned.apk app-release-signed.apk
+          zipalign -v -p 4 \
+            app/build/outputs/apk/release/app-release-unsigned.apk \
+            app-release-signed.apk
 
       # -----------------------------
       # 6. Upload do APK assinado
@@ -77,3 +79,4 @@ jobs:
         with:
           name: app-release-apk
           path: app-release-signed.apk
+          
