@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.os.RemoteException
 import android.util.Log
 import com.hannsapp.fpscounter.HannsApplication
 import com.hannsapp.fpscounter.data.ConnectionStatus
@@ -19,6 +20,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rikka.shizuku.Shizuku
+import rikka.shizuku.ShizukuBinderWrapper
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
 import java.util.Collections
@@ -129,8 +131,8 @@ class ShizukuService private constructor(private val context: Context) {
 
     fun isShizukuInstalled(): Boolean {
         return try {
-            val shizukuPackage = Shizuku.getShizukuPackageName()
-            context.packageManager.getPackageInfo(shizukuPackage, 0)
+            val packageName = "moe.shizuku.privileged.api"
+            context.packageManager.getPackageInfo(packageName, 0)
             true
         } catch (e: Exception) {
             false
@@ -232,8 +234,13 @@ class ShizukuService private constructor(private val context: Context) {
         return withContext(Dispatchers.IO) {
             var process: Process? = null
             try {
+                val binder = Shizuku.getBinder()
+                if (binder == null) {
+                    throw RemoteException("Shizuku binder is null")
+                }
+
                 val cmdArray = arrayOf("sh", "-c", command)
-                process = Shizuku.newProcess(cmdArray, null, null)
+                process = ShizukuBinderWrapper(binder).newProcess(cmdArray, null, null)
 
                 val outputDeferred = async { readStreamFully(process.inputStream) }
                 val errorDeferred = async { readStreamFully(process.errorStream) }
@@ -273,8 +280,13 @@ class ShizukuService private constructor(private val context: Context) {
         }
         var process: Process? = null
         return try {
+            val binder = Shizuku.getBinder()
+            if (binder == null) {
+                return ""
+            }
+
             val cmdArray = arrayOf("sh", "-c", command)
-            process = Shizuku.newProcess(cmdArray, null, null)
+            process = ShizukuBinderWrapper(binder).newProcess(cmdArray, null, null)
 
             val output = process.inputStream.bufferedReader(StandardCharsets.UTF_8).use { it.readText() }
             process.waitFor()
