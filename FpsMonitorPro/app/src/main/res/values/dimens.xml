@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Margins and Padding -->
+    <dimen name="margin_tiny">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_xlarge">32dp</dimen>
+    <dimen name="margin_xxlarge">48dp</dimen>
+
+    <dimen name="padding_tiny">4dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+    <dimen name="padding_xlarge">32dp</dimen>
+
+    <!-- Corner Radius -->
+    <dimen name="corner_radius_small">8dp</dimen>
+    <dimen name="corner_radius_medium">12dp</dimen>
+    <dimen name="corner_radius_large">16dp</dimen>
+    <dimen name="corner_radius_xlarge">24dp</dimen>
+    <dimen name="corner_radius_circle">50dp</dimen>
+
+    <!-- Card -->
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="card_corner_radius">16dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+
+    <!-- Button -->
+    <dimen name="button_height">56dp</dimen>
+    <dimen name="button_height_small">40dp</dimen>
+    <dimen name="button_corner_radius">12dp</dimen>
+    <dimen name="button_padding_horizontal">24dp</dimen>
+    <dimen name="button_padding_vertical">12dp</dimen>
+
+    <!-- Icon -->
+    <dimen name="icon_size_small">16dp</dimen>
+    <dimen name="icon_size_medium">24dp</dimen>
+    <dimen name="icon_size_large">32dp</dimen>
+    <dimen name="icon_size_xlarge">48dp</dimen>
+    <dimen name="icon_size_xxlarge">64dp</dimen>
+
+    <!-- Text -->
+    <dimen name="text_size_caption">12sp</dimen>
+    <dimen name="text_size_body">14sp</dimen>
+    <dimen name="text_size_subtitle">16sp</dimen>
+    <dimen name="text_size_title">20sp</dimen>
+    <dimen name="text_size_headline">24sp</dimen>
+    <dimen name="text_size_display">32sp</dimen>
+    <dimen name="text_size_fps_large">72sp</dimen>
+    <dimen name="text_size_fps_medium">48sp</dimen>
+
+    <!-- Overlay -->
+    <dimen name="overlay_width_small">80dp</dimen>
+    <dimen name="overlay_width_medium">120dp</dimen>
+    <dimen name="overlay_width_large">160dp</dimen>
+    <dimen name="overlay_height_small">40dp</dimen>
+    <dimen name="overlay_height_medium">60dp</dimen>
+    <dimen name="overlay_height_large">80dp</dimen>
+    <dimen name="overlay_corner_radius">12dp</dimen>
+    <dimen name="overlay_padding">8dp</dimen>
+    <dimen name="overlay_margin">16dp</dimen>
+
+    <!-- Navigation -->
+    <dimen name="bottom_nav_height">64dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+
+    <!-- List Item -->
+    <dimen name="list_item_height">72dp</dimen>
+    <dimen name="list_item_padding">16dp</dimen>
+    <dimen name="list_item_icon_size">40dp</dimen>
+
+    <!-- Divider -->
+    <dimen name="divider_height">1dp</dimen>
+
+    <!-- Progress -->
+    <dimen name="progress_bar_height">4dp</dimen>
+    <dimen name="progress_indicator_size">48dp</dimen>
+
+    <!-- Chart -->
+    <dimen name="chart_height">200dp</dimen>
+    <dimen name="chart_line_width">2dp</dimen>
+
+    <!-- Connection Card -->
+    <dimen name="connection_card_height">120dp</dimen>
+    <dimen name="connection_icon_size">48dp</dimen>
+
+    <!-- App Icon -->
+    <dimen name="app_icon_size">48dp</dimen>
+    <dimen name="app_icon_size_large">64dp</dimen>
+
+    <!-- Slider -->
+    <dimen name="slider_thumb_radius">12dp</dimen>
+    <dimen name="slider_track_height">4dp</dimen>
+
+    <!-- Animation -->
+    <integer name="anim_duration_short">150</integer>
+    <integer name="anim_duration_medium">300</integer>
+    <integer name="anim_duration_long">500</integer>
+</resources>

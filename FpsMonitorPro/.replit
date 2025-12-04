@@ -1,0 +1,30 @@
+modules = ["java-graalvm22.3"]
+[agent]
+expertMode = true
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Build Hannsapp APK"
+
+[[workflows.workflow]]
+name = "Build Hannsapp APK"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash -c \"export ANDROID_HOME=$HOME/android-sdk && export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH && if [ ! -d $ANDROID_HOME/cmdline-tools/latest ]; then echo 'Setting up Android SDK...' && bash setup_android_sdk.sh; fi && echo '=== Building Hannsapp APK ===' && bash build_apk.sh debug 2>&1\""
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[nix]
+channel = "stable-25_05"
+packages = ["unzip"]

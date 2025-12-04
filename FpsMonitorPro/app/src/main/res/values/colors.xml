@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Blue Theme Colors -->
+    <color name="primary">#1565C0</color>
+    <color name="primary_dark">#0D47A1</color>
+    <color name="primary_light">#42A5F5</color>
+    <color name="primary_variant">#1976D2</color>
+
+    <!-- Secondary Colors -->
+    <color name="secondary">#00BCD4</color>
+    <color name="secondary_dark">#0097A7</color>
+    <color name="secondary_light">#4DD0E1</color>
+    <color name="secondary_variant">#00ACC1</color>
+
+    <!-- Accent Colors -->
+    <color name="accent">#03A9F4</color>
+    <color name="accent_light">#4FC3F7</color>
+    <color name="accent_dark">#0288D1</color>
+
+    <!-- Background Colors -->
+    <color name="background_dark">#0A1929</color>
+    <color name="background_medium">#0D2137</color>
+    <color name="background_light">#132F4C</color>
+    <color name="background_card">#173A5E</color>
+
+    <!-- Surface Colors -->
+    <color name="surface">#1A3A5C</color>
+    <color name="surface_variant">#1E4976</color>
+    <color name="surface_elevated">#224C7A</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0BEC5</color>
+    <color name="text_tertiary">#78909C</color>
+    <color name="text_disabled">#546E7A</color>
+    <color name="text_on_primary">#FFFFFF</color>
+
+    <!-- Status Colors -->
+    <color name="success">#4CAF50</color>
+    <color name="success_light">#81C784</color>
+    <color name="warning">#FFC107</color>
+    <color name="warning_light">#FFD54F</color>
+    <color name="error">#F44336</color>
+    <color name="error_light">#E57373</color>
+    <color name="info">#2196F3</color>
+    <color name="info_light">#64B5F6</color>
+
+    <!-- FPS Counter Colors -->
+    <color name="fps_excellent">#4CAF50</color>
+    <color name="fps_good">#8BC34A</color>
+    <color name="fps_moderate">#FFC107</color>
+    <color name="fps_poor">#FF9800</color>
+    <color name="fps_critical">#F44336</color>
+
+    <!-- Overlay Colors -->
+    <color name="overlay_background">#CC0A1929</color>
+    <color name="overlay_border">#661565C0</color>
+
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#1565C0</color>
+    <color name="gradient_center">#0D47A1</color>
+    <color name="gradient_end">#0A1929</color>
+
+    <!-- Ripple and Touch -->
+    <color name="ripple_color">#3342A5F5</color>
+    <color name="touch_highlight">#2242A5F5</color>
+
+    <!-- Divider -->
+    <color name="divider">#1E4976</color>
+    <color name="divider_light">#2E5A8A</color>
+
+    <!-- Navigation -->
+    <color name="nav_selected">#42A5F5</color>
+    <color name="nav_unselected">#78909C</color>
+
+    <!-- System Status Colors -->
+    <color name="memory_low">#4CAF50</color>
+    <color name="memory_medium">#FFC107</color>
+    <color name="memory_high">#F44336</color>
+    <color name="cpu_cool">#4CAF50</color>
+    <color name="cpu_warm">#FFC107</color>
+    <color name="cpu_hot">#F44336</color>
+
+    <!-- Connection Status -->
+    <color name="connected">#4CAF50</color>
+    <color name="connecting">#FFC107</color>
+    <color name="disconnected">#F44336</color>
+
+    <!-- Chart Colors -->
+    <color name="chart_line_1">#42A5F5</color>
+    <color name="chart_line_2">#66BB6A</color>
+    <color name="chart_line_3">#FFA726</color>
+    <color name="chart_fill">#3342A5F5</color>
+    <color name="chart_grid">#1E4976</color>
+
+    <!-- Button Colors -->
+    <color name="button_primary">#1565C0</color>
+    <color name="button_primary_pressed">#0D47A1</color>
+    <color name="button_secondary">#173A5E</color>
+    <color name="button_secondary_pressed">#0D2137</color>
+    <color name="button_disabled">#37474F</color>
+
+    <!-- Switch/Toggle Colors -->
+    <color name="switch_thumb_on">#42A5F5</color>
+    <color name="switch_thumb_off">#78909C</color>
+    <color name="switch_track_on">#1565C0</color>
+    <color name="switch_track_off">#37474F</color>
+
+    <!-- Transparent variants -->
+    <color name="transparent">#00000000</color>
+    <color name="semi_transparent_dark">#80000000</color>
+    <color name="semi_transparent_blue">#801565C0</color>
+</resources>

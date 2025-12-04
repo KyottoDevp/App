@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.ConnectionActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/text_primary"
+            app:title="@string/connection_title"
+            app:titleTextColor="@color/text_primary" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:text="@string/connection_subtitle"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_size_subtitle" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardWifiDebug"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/background_card"
+                app:cardCornerRadius="@dimen/corner_radius_large"
+                app:cardElevation="@dimen/card_elevation"
+                app:strokeColor="@color/primary"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_medium">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/connection_icon_size"
+                            android:layout_height="@dimen/connection_icon_size"
+                            android:src="@drawable/ic_wifi"
+                            app:tint="@color/primary_light"
+                            android:contentDescription="@string/wifi_debug_title" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_medium"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/wifi_debug_title"
+                                android:textColor="@color/text_primary"
+                                android:textSize="@dimen/text_size_title"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/wifi_debug_description"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="@dimen/text_size_body" />
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivWifiExpand"
+                            android:layout_width="@dimen/icon_size_medium"
+                            android:layout_height="@dimen/icon_size_medium"
+                            android:rotation="0"
+                            android:src="@drawable/ic_settings"
+                            app:tint="@color/text_secondary"
+                            android:contentDescription="@string/wifi_debug_title" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/wifiDebugDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/padding_medium"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="@dimen/margin_medium"
+                            android:background="@color/divider" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilIpAddress"
+                            style="@style/Theme.Hannsapp.TextInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_medium"
+                            android:hint="@string/enter_ip_address"
+                            app:startIconDrawable="@drawable/ic_wifi">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etIpAddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:textColor="@color/text_primary" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_medium"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilPort"
+                                style="@style/Theme.Hannsapp.TextInput"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/margin_small"
+                                android:layout_weight="1"
+                                android:hint="@string/enter_port">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etPort"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number"
+                                    android:maxLines="1"
+                                    android:text="5555"
+                                    android:textColor="@color/text_primary" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilPairingCode"
+                                style="@style/Theme.Hannsapp.TextInput"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_small"
+                                android:layout_weight="2"
+                                android:hint="@string/enter_pairing_code">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etPairingCode"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number"
+                                    android:maxLines="1"
+                                    android:textColor="@color/text_primary" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/wifiStatusLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="@dimen/padding_small"
+                            android:visibility="gone"
+                            tools:visibility="visible">
+
+                            <com.google.android.material.progressindicator.CircularProgressIndicator
+                                android:id="@+id/progressWifi"
+                                android:layout_width="@dimen/icon_size_medium"
+                                android:layout_height="@dimen/icon_size_medium"
+                                android:indeterminate="true"
+                                android:visibility="gone"
+                                app:indicatorColor="@color/primary_light"
+                                app:indicatorSize="24dp"
+                                app:trackThickness="3dp"
+                                tools:visibility="visible" />
+
+                            <ImageView
+                                android:id="@+id/ivWifiStatus"
+                                android:layout_width="@dimen/icon_size_medium"
+                                android:layout_height="@dimen/icon_size_medium"
+                                android:src="@drawable/ic_check_circle"
+                                android:visibility="gone"
+                                app:tint="@color/success"
+                                android:contentDescription="@string/connected"
+                                tools:visibility="visible" />
+
+                            <TextView
+                                android:id="@+id/tvWifiStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_small"
+                                android:text="@string/connecting"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="@dimen/text_size_body" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnPair"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/margin_small"
+                                android:layout_weight="1"
+                                android:text="@string/pair"
+                                app:strokeColor="@color/primary" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnConnectWifi"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_small"
+                                android:layout_weight="1"
+                                android:text="@string/connect"
+                                app:backgroundTint="@color/primary" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardShizuku"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/background_card"
+                app:cardCornerRadius="@dimen/corner_radius_large"
+                app:cardElevation="@dimen/card_elevation">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_medium">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/connection_icon_size"
+                            android:layout_height="@dimen/connection_icon_size"
+                            android:src="@drawable/ic_shizuku"
+                            app:tint="@color/secondary_light"
+                            android:contentDescription="@string/shizuku_title" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_medium"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/shizuku_title"
+                                android:textColor="@color/text_primary"
+                                android:textSize="@dimen/text_size_title"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/shizuku_description"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="@dimen/text_size_body" />
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivShizukuExpand"
+                            android:layout_width="@dimen/icon_size_medium"
+                            android:layout_height="@dimen/icon_size_medium"
+                            android:rotation="0"
+                            android:src="@drawable/ic_settings"
+                            app:tint="@color/text_secondary"
+                            android:contentDescription="@string/shizuku_title" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/shizukuDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/padding_medium"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="@dimen/margin_medium"
+                            android:background="@color/divider" />
+
+                        <LinearLayout
+                            android:id="@+id/shizukuStatusLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="@dimen/padding_small">
+
+                            <com.google.android.material.progressindicator.CircularProgressIndicator
+                                android:id="@+id/progressShizuku"
+                                android:layout_width="@dimen/icon_size_medium"
+                                android:layout_height="@dimen/icon_size_medium"
+                                android:indeterminate="true"
+                                android:visibility="gone"
+                                app:indicatorColor="@color/secondary_light"
+                                app:indicatorSize="24dp"
+                                app:trackThickness="3dp" />
+
+                            <ImageView
+                                android:id="@+id/ivShizukuStatus"
+                                android:layout_width="@dimen/icon_size_medium"
+                                android:layout_height="@dimen/icon_size_medium"
+                                android:src="@drawable/ic_error"
+                                app:tint="@color/error"
+                                android:contentDescription="@string/disconnected" />
+
+                            <TextView
+                                android:id="@+id/tvShizukuStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_small"
+                                android:text="@string/error_shizuku_not_running"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="@dimen/text_size_body" />
+
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnConnectShizuku"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:text="@string/connect"
+                            app:backgroundTint="@color/secondary" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardConnectionInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/background_card"
+                app:cardCornerRadius="@dimen/corner_radius_large"
+                app:cardElevation="@dimen/card_elevation"
+                app:strokeColor="@color/success"
+                app:strokeWidth="1dp"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_medium">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_size_large"
+                            android:layout_height="@dimen/icon_size_large"
+                            android:src="@drawable/ic_check_circle"
+                            app:tint="@color/success"
+                            android:contentDescription="@string/connected" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_medium"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/connected"
+                                android:textColor="@color/success"
+                                android:textSize="@dimen/text_size_subtitle"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvConnectionDetails"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="192.168.1.100:5555"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="@dimen/text_size_body" />
+
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnDisconnect"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/disconnect"
+                            android:textColor="@color/error" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

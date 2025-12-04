@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Internet & Network Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!-- Overlay Permission - Required for FPS Counter Display -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- Usage Stats Permission - Required for App Monitoring -->
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- Foreground Service Permissions -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Query Apps Permission -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+    <!-- System Information Permissions -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"
+        tools:ignore="ScopedStorage" />
+
+    <!-- Wake Lock for continuous monitoring -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Boot Completed for auto-start -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Vibration for feedback -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Request ignore battery optimizations -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <!-- Shizuku Permission -->
+    <uses-permission android:name="moe.shizuku.manager.permission.API_V23" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+        </intent>
+        <package android:name="moe.shizuku.privileged.api" />
+    </queries>
+
+    <application
+        android:name=".HannsApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/ic_launcher_legacy"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_launcher_legacy"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Hannsapp"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
+        tools:targetApi="34">
+
+        <!-- Main Activity -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.Hannsapp.SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Connection Activity -->
+        <activity
+            android:name=".ui.ConnectionActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Hannsapp" />
+
+        <!-- Settings Activity -->
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Hannsapp" />
+
+        <!-- App Selection Activity -->
+        <activity
+            android:name=".ui.AppSelectionActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Hannsapp" />
+
+        <!-- Overlay Customization Activity -->
+        <activity
+            android:name=".ui.OverlayCustomizationActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Hannsapp" />
+
+        <!-- System Info Activity -->
+        <activity
+            android:name=".ui.SystemInfoActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Hannsapp" />
+
+        <!-- FPS Overlay Service -->
+        <service
+            android:name=".services.FpsOverlayService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="fps_monitoring" />
+        </service>
+
+        <!-- FPS Monitor Service -->
+        <service
+            android:name=".services.FpsMonitorService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="performance_monitoring" />
+        </service>
+
+        <!-- ADB Connection Service -->
+        <service
+            android:name=".services.AdbConnectionService"
+            android:exported="false" />
+
+        <!-- Shizuku Service -->
+        <service
+            android:name=".services.ShizukuService"
+            android:exported="true"
+            android:permission="moe.shizuku.manager.permission.API_V23">
+            <intent-filter>
+                <action android:name="rikka.shizuku.BIND_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <!-- Accessibility Service for FPS Detection -->
+        <service
+            android:name=".services.FpsAccessibilityService"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <!-- Boot Receiver -->
+        <receiver
+            android:name=".receivers.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Notification Channels are created programmatically -->
+
+        <!-- Shizuku Provider -->
+        <provider
+            android:name="rikka.shizuku.ShizukuProvider"
+            android:authorities="${applicationId}.shizuku"
+            android:enabled="true"
+            android:exported="true"
+            android:multiprocess="false"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL"
+            tools:ignore="MissingClass" />
+
+        <!-- FileProvider for sharing -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>

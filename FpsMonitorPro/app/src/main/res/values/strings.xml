@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hannsapp</string>
+    <string name="app_description">FPS Counter &amp; System Monitor</string>
+    <string name="app_version">1.0.0</string>
+
+    <!-- Connection Screen -->
+    <string name="connection_title">Conectar Dispositivo</string>
+    <string name="connection_subtitle">Escolha o método de conexão</string>
+    <string name="wifi_debug_title">Depuração Wi-Fi</string>
+    <string name="wifi_debug_description">Conecte via código de pareamento</string>
+    <string name="shizuku_title">Shizuku</string>
+    <string name="shizuku_description">Conecte usando o serviço Shizuku</string>
+    <string name="enter_pairing_code">Digite o código de pareamento</string>
+    <string name="enter_ip_address">Endereço IP</string>
+    <string name="enter_port">Porta</string>
+    <string name="connect">Conectar</string>
+    <string name="pair">Parear</string>
+    <string name="disconnect">Desconectar</string>
+    <string name="connecting">Conectando...</string>
+    <string name="connected">Conectado</string>
+    <string name="disconnected">Desconectado</string>
+    <string name="connection_failed">Falha na conexão</string>
+    <string name="connection_success">Conexão estabelecida</string>
+
+    <!-- Main Screen -->
+    <string name="main_title">Hannsapp</string>
+    <string name="fps_counter">Contador FPS</string>
+    <string name="system_info">Info do Sistema</string>
+    <string name="apps">Aplicativos</string>
+    <string name="settings">Configurações</string>
+    <string name="start_monitoring">Iniciar Monitoramento</string>
+    <string name="stop_monitoring">Parar Monitoramento</string>
+    <string name="monitoring_active">Monitoramento Ativo</string>
+    <string name="monitoring_inactive">Monitoramento Inativo</string>
+
+    <!-- FPS Display -->
+    <string name="current_fps">FPS Atual</string>
+    <string name="average_fps">FPS Médio</string>
+    <string name="min_fps">FPS Mínimo</string>
+    <string name="max_fps">FPS Máximo</string>
+    <string name="fps_history">Histórico FPS</string>
+    <string name="fps_unit">FPS</string>
+
+    <!-- System Info -->
+    <string name="cpu_usage">Uso de CPU</string>
+    <string name="memory_usage">Uso de Memória</string>
+    <string name="memory_available">Memória Disponível</string>
+    <string name="memory_total">Memória Total</string>
+    <string name="battery_level">Nível da Bateria</string>
+    <string name="battery_temp">Temperatura da Bateria</string>
+    <string name="cpu_temp">Temperatura CPU</string>
+    <string name="gpu_usage">Uso de GPU</string>
+    <string name="screen_refresh">Taxa de Atualização</string>
+
+    <!-- App Selection -->
+    <string name="select_apps">Selecionar Aplicativos</string>
+    <string name="monitored_apps">Apps Monitorados</string>
+    <string name="all_apps">Todos os Apps</string>
+    <string name="search_apps">Buscar aplicativos...</string>
+    <string name="no_apps_found">Nenhum app encontrado</string>
+    <string name="app_added">App adicionado ao monitoramento</string>
+    <string name="app_removed">App removido do monitoramento</string>
+    <string name="system_apps">Apps do Sistema</string>
+    <string name="user_apps">Apps do Usuário</string>
+
+    <!-- Overlay Settings -->
+    <string name="overlay_settings">Configurações do Overlay</string>
+    <string name="overlay_position">Posição</string>
+    <string name="overlay_size">Tamanho</string>
+    <string name="overlay_opacity">Opacidade</string>
+    <string name="overlay_color">Cor</string>
+    <string name="overlay_style">Estilo</string>
+    <string name="position_top_left">Superior Esquerdo</string>
+    <string name="position_top_right">Superior Direito</string>
+    <string name="position_bottom_left">Inferior Esquerdo</string>
+    <string name="position_bottom_right">Inferior Direito</string>
+    <string name="position_center_top">Centro Superior</string>
+    <string name="position_center_bottom">Centro Inferior</string>
+    <string name="size_small">Pequeno</string>
+    <string name="size_medium">Médio</string>
+    <string name="size_large">Grande</string>
+    <string name="show_fps">Mostrar FPS</string>
+    <string name="show_memory">Mostrar Memória</string>
+    <string name="show_cpu">Mostrar CPU</string>
+    <string name="show_battery">Mostrar Bateria</string>
+    <string name="show_temp">Mostrar Temperatura</string>
+
+    <!-- Permissions -->
+    <string name="permission_overlay_title">Permissão de Sobreposição</string>
+    <string name="permission_overlay_desc">Necessário para exibir o contador FPS sobre outros apps</string>
+    <string name="permission_usage_title">Acesso a Dados de Uso</string>
+    <string name="permission_usage_desc">Necessário para monitorar aplicativos em execução</string>
+    <string name="permission_notification_title">Permissão de Notificação</string>
+    <string name="permission_notification_desc">Necessário para manter o serviço ativo</string>
+    <string name="permission_accessibility_title">Serviço de Acessibilidade</string>
+    <string name="permission_accessibility_desc">Necessário para detecção precisa de FPS</string>
+    <string name="grant_permission">Conceder Permissão</string>
+    <string name="permission_granted">Permissão Concedida</string>
+    <string name="permission_denied">Permissão Negada</string>
+    <string name="all_permissions_granted">Todas as permissões concedidas</string>
+    <string name="permissions_required">Permissões necessárias</string>
+
+    <!-- Settings -->
+    <string name="general_settings">Geral</string>
+    <string name="auto_start">Iniciar com o sistema</string>
+    <string name="auto_start_summary">Iniciar monitoramento ao ligar o dispositivo</string>
+    <string name="dark_theme">Tema Escuro</string>
+    <string name="dark_theme_summary">Usar tema escuro na interface</string>
+    <string name="vibration">Vibração</string>
+    <string name="vibration_summary">Vibrar ao iniciar/parar monitoramento</string>
+    <string name="update_interval">Intervalo de Atualização</string>
+    <string name="update_interval_summary">Frequência de atualização do contador</string>
+    <string name="about">Sobre</string>
+    <string name="version">Versão</string>
+    <string name="developer">Desenvolvedor</string>
+    <string name="reset_settings">Redefinir Configurações</string>
+    <string name="reset_settings_confirm">Deseja redefinir todas as configurações?</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_name">Hannsapp FPS Monitor</string>
+    <string name="notification_channel_desc">Notificações do monitoramento de FPS</string>
+    <string name="notification_title">Monitoramento Ativo</string>
+    <string name="notification_text">FPS: %1$d | Memória: %2$s</string>
+    <string name="notification_text_fps">FPS: %1$d</string>
+    <string name="notification_tap_to_open">Toque para abrir</string>
+    <string name="overlay_notification_title">Overlay FPS Ativo</string>
+    <string name="overlay_notification_text">Exibindo contador FPS na tela</string>
+    <string name="stop">Parar</string>
+
+    <!-- Errors -->
+    <string name="error_generic">Ocorreu um erro</string>
+    <string name="error_connection">Erro de conexão</string>
+    <string name="error_permission">Permissão negada</string>
+    <string name="error_overlay">Erro ao criar overlay</string>
+    <string name="error_service">Erro no serviço</string>
+    <string name="error_shizuku_not_running">Shizuku não está em execução</string>
+    <string name="error_shizuku_permission">Permissão Shizuku negada</string>
+
+    <!-- Actions -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+    <string name="save">Salvar</string>
+    <string name="apply">Aplicar</string>
+    <string name="close">Fechar</string>
+    <string name="retry">Tentar Novamente</string>
+    <string name="skip">Pular</string>
+    <string name="next">Próximo</string>
+    <string name="back">Voltar</string>
+    <string name="done">Concluído</string>
+    <string name="confirm">Confirmar</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+
+    <!-- Intervals -->
+    <string name="interval_100ms">100ms (Muito Rápido)</string>
+    <string name="interval_250ms">250ms (Rápido)</string>
+    <string name="interval_500ms">500ms (Normal)</string>
+    <string name="interval_1000ms">1000ms (Lento)</string>
+
+    <!-- Units -->
+    <string name="unit_mb">MB</string>
+    <string name="unit_gb">GB</string>
+    <string name="unit_percent">%</string>
+    <string name="unit_celsius">°C</string>
+    <string name="unit_hz">Hz</string>
+
+    <!-- Accessibility -->
+    <string name="accessibility_service_description">Este serviço permite que o Hannsapp monitore o FPS de aplicativos em execução detectando atualizações de tela.</string>
+</resources>

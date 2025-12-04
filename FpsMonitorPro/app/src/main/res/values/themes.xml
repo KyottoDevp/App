@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Hannsapp" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/text_on_primary</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant</item>
+        <item name="colorOnSecondary">@color/text_primary</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/text_primary</item>
+        <item name="android:colorBackground">@color/background_dark</item>
+        <item name="colorOnBackground">@color/text_primary</item>
+        <item name="android:windowBackground">@color/background_dark</item>
+        <item name="android:statusBarColor">@color/background_dark</item>
+        <item name="android:navigationBarColor">@color/background_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="rippleColor">@color/ripple_color</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationStyle</item>
+    </style>
+
+    <style name="Theme.Hannsapp.SplashScreen" parent="Theme.Hannsapp">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
+    <style name="WindowAnimationStyle">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Card">
+        <item name="cardBackgroundColor">@color/background_card</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="contentPadding">16dp</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Button.Primary" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">@color/primary</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">@color/primary</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:textColor">@color/primary_light</item>
+        <item name="android:textSize">16sp</item>
+        <item name="cornerRadius">12dp</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Button.Icon" parent="Widget.Material3.Button.IconButton">
+        <item name="iconTint">@color/text_primary</item>
+        <item name="rippleColor">@color/ripple_color</item>
+    </style>
+
+    <style name="Theme.Hannsapp.TextInput" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="hintTextColor">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/text_tertiary</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="thumbTint">@color/switch_thumb_selector</item>
+        <item name="trackTint">@color/switch_track_selector</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Chip" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">@color/chip_background_selector</item>
+        <item name="chipStrokeColor">@color/primary</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipCornerRadius">20dp</item>
+        <item name="android:textColor">@color/chip_text_selector</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Slider" parent="Widget.Material3.Slider">
+        <item name="thumbColor">@color/primary</item>
+        <item name="trackColorActive">@color/primary</item>
+        <item name="trackColorInactive">@color/surface_variant</item>
+        <item name="haloColor">@color/ripple_color</item>
+    </style>
+
+    <style name="Theme.Hannsapp.BottomNav" parent="Widget.Material3.BottomNavigationView">
+        <item name="android:background">@color/background_medium</item>
+        <item name="itemIconTint">@color/nav_item_selector</item>
+        <item name="itemTextColor">@color/nav_item_selector</item>
+        <item name="itemActiveIndicatorStyle">@style/Theme.Hannsapp.BottomNav.Indicator</item>
+    </style>
+
+    <style name="Theme.Hannsapp.BottomNav.Indicator" parent="">
+        <item name="android:color">@color/primary</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:background">@color/background_card</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="dialogCornerRadius">20dp</item>
+    </style>
+
+    <style name="Theme.Hannsapp.ProgressBar" parent="Widget.Material3.CircularProgressIndicator">
+        <item name="indicatorColor">@color/primary</item>
+        <item name="trackColor">@color/surface_variant</item>
+        <item name="trackThickness">4dp</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Text" parent="">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Text.Title">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Text.Subtitle">
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Text.Body">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Text.Caption">
+        <item name="android:textColor">@color/text_tertiary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Text.FpsLarge">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">72sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="Theme.Hannsapp.Text.FpsMedium">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">48sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+</resources>
