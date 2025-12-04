@@ -2,23 +2,35 @@ name: Build Release APK
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches: [ "main" ]   # Executa automaticamente em cada push para a branch main
+  workflow_dispatch:        # Permite rodar manualmente pelo GitHub ou via gh workflow run
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest   # Runner mais atualizado (Ubuntu 24.04 LTS)
 
     steps:
+      # -----------------------------
+      # 1. Checkout do código fonte
+      # -----------------------------
       - name: Checkout código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # Pega histórico completo (útil para versionamento)
 
+      # -----------------------------
+      # 2. Instalação do JDK
+      # -----------------------------
       - name: Instalar JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
+          cache: gradle   # Habilita cache para builds mais rápidos
 
+      # -----------------------------
+      # 3. Instalação do Android SDK
+      # -----------------------------
       - name: Instalar Android SDK
         run: |
           sudo apt-get update
@@ -33,21 +45,35 @@ jobs:
           yes | sdkmanager --licenses
           sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
+      # -----------------------------
+      # 4. Build do APK Release
+      # -----------------------------
       - name: Build APK Release
         run: ./gradlew assembleRelease
 
+      # -----------------------------
+      # 5. Assinatura do APK
+      # -----------------------------
       - name: Assinar APK
         run: |
+          # Decodifica a chave armazenada como secret
           echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > release-key.jks
+          
+          # Assina o APK gerado
           jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
             -keystore release-key.jks \
             -storepass ${{ secrets.KEYSTORE_PASSWORD }} \
             app/build/outputs/apk/release/app-release-unsigned.apk \
             ${{ secrets.KEY_ALIAS }}
+
+          # Alinha o APK para otimização
           zipalign -v -p 4 app/build/outputs/apk/release/app-release-unsigned.apk app-release-signed.apk
 
+      # -----------------------------
+      # 6. Upload do APK assinado
+      # -----------------------------
       - name: Salvar APK assinado
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
           path: app-release-signed.apk
