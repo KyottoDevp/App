@@ -109,6 +109,7 @@ class AdbConnectionService : Service() {
                     executePairCommand(ip, port, code)
                 }
 
+                // CORRIGIDO: Comparar explicitamente com 'true' para lidar com o tipo 'Boolean?'
                 val success = result == true
                 val message = if (success) {
                     "Pairing successful"
@@ -166,6 +167,7 @@ class AdbConnectionService : Service() {
                     executeConnectCommand(ip, port)
                 }
 
+                // CORRIGIDO: Comparar explicitamente com 'true' para lidar com o tipo 'Boolean?'
                 val success = result == true
                 isConnected = success
                 currentIp = if (success) ip else ""
