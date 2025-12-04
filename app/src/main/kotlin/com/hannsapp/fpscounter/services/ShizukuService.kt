@@ -34,7 +34,7 @@ class ShizukuService private constructor(private val context: Context) {
 
     private var isShizukuAvailable = false
     private var hasShizukuPermission = false
-    
+
     private val listeners = mutableSetOf<ShizukuListener>()
     private var userService: IShizukuUserService? = null
     private var isUserServiceBound = false
@@ -70,7 +70,7 @@ class ShizukuService private constructor(private val context: Context) {
             hasShizukuPermission = granted
             Log.d(TAG, "Shizuku permission result: $granted")
             notifyPermissionResult(granted)
-            
+
             if (granted) {
                 preferencesManager.connectionType = Constants.CONNECTION_TYPE_SHIZUKU
                 notifyConnectionStatus(ConnectionStatus(
@@ -215,7 +215,8 @@ class ShizukuService private constructor(private val context: Context) {
     private suspend fun executePrivilegedCommand(command: String): Pair<Boolean, String> {
         return withContext(Dispatchers.IO) {
             try {
-                val process = ShizukuBinderWrapper(Shizuku.getService()).newProcess(arrayOf("sh", "-c", command), null, null)
+                // CORRIGIDO: Chamada direta para Shizuku.newProcess
+                val process = Shizuku.newProcess(arrayOf("sh", "-c", command), null, null)
                 val reader = BufferedReader(InputStreamReader(process.inputStream))
                 val errorReader = BufferedReader(InputStreamReader(process.errorStream))
 
@@ -233,7 +234,7 @@ class ShizukuService private constructor(private val context: Context) {
                 errorReader.close()
 
                 val exitCode = process.waitFor()
-                
+
                 if (exitCode == 0) {
                     Pair(true, output.toString().trim())
                 } else {
@@ -252,7 +253,8 @@ class ShizukuService private constructor(private val context: Context) {
         }
 
         return try {
-            val process = ShizukuBinderWrapper(Shizuku.getService()).newProcess(arrayOf("sh", "-c", command), null, null)
+            // CORRIGIDO: Chamada direta para Shizuku.newProcess
+            val process = Shizuku.newProcess(arrayOf("sh", "-c", command), null, null)
             val reader = BufferedReader(InputStreamReader(process.inputStream))
             val output = StringBuilder()
             var line: String?
