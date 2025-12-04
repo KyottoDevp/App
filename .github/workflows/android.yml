@@ -3,7 +3,7 @@ name: Build Android APK (Java + Kotlin)
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch:   # Permite rodar manualmente pelo GitHub ou via gh workflow run
+  workflow_dispatch:
 
 jobs:
   build:
@@ -16,16 +16,16 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # Pega histórico completo (útil para versionamento)
+          fetch-depth: 0
 
       # -----------------------------
-      # 2. Instalar JDK (Java + Kotlin)
+      # 2. Instalar JDK
       # -----------------------------
-      - name: Instalar JDK (Java + Kotlin)
+      - name: Instalar JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: temurin
+          java-version: 17
           cache: gradle
 
       # -----------------------------
@@ -43,25 +43,25 @@ jobs:
           echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
           echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
           yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          sdkmanager "platform-platforms" "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
       # -----------------------------
       # 4. Permitir execução do Gradle
       # -----------------------------
-      - name: Permitir execução do Gradle
-        run: chmod +x ./gradlew
+      - name: Dar permissão ao Gradlew
+        run: chmod +x gradlew
 
       # -----------------------------
-      # 5. Compilar APK (Java + Kotlin)
+      # 5. Compilar APK
       # -----------------------------
-      - name: Compilar APK (Java + Kotlin)
+      - name: Compilar APK (Debug)
         run: ./gradlew assembleDebug --stacktrace --info
 
       # -----------------------------
-      # 6. Salvar APK como artefato
+      # 6. Upload do APK gerado
       # -----------------------------
       - name: Salvar APK como artefato
-        uses: actions/upload-artifact@v4   # ✔️ CORRIGIDO
+        uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
