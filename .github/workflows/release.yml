@@ -3,7 +3,7 @@ name: Build Release APK
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch:   # permite rodar manualmente também
+  workflow_dispatch:
 
 jobs:
   build:
