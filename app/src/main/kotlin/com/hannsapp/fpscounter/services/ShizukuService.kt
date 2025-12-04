@@ -16,13 +16,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rikka.shizuku.Shizuku
-import java.io.BufferedReader
 import java.io.InputStream
-import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
 import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
@@ -51,21 +48,30 @@ class ShizukuService private constructor(private val context: Context) {
     }
 
     private val binderReceivedListener = Shizuku.OnBinderReceivedListener {
+        Log.d(TAG, "Shizuku binder received")
         isShizukuAvailableAtomic.set(true)
         checkPermission()
         notifyAvailabilityChanged(true)
     }
 
     private val binderDeadListener = Shizuku.OnBinderDeadListener {
+        Log.w(TAG, "Shizuku binder dead")
         isShizukuAvailableAtomic.set(false)
         hasShizukuPermissionAtomic.set(false)
         notifyAvailabilityChanged(false)
+        notifyConnectionStatus(
+            ConnectionStatus(
+                isConnected = false,
+                connectionType = Constants.CONNECTION_TYPE_NONE
+            )
+        )
     }
 
     private val permissionResultListener = Shizuku.OnRequestPermissionResultListener { requestCode, grantResult ->
         if (requestCode == Constants.SHIZUKU_REQUEST_CODE) {
             val granted = grantResult == PackageManager.PERMISSION_GRANTED
             hasShizukuPermissionAtomic.set(granted)
+            Log.d(TAG, "Shizuku permission result: $granted")
             notifyPermissionResult(granted)
             if (granted) {
                 preferencesManager.connectionType = Constants.CONNECTION_TYPE_SHIZUKU
@@ -81,10 +87,12 @@ class ShizukuService private constructor(private val context: Context) {
 
     private val userServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            Log.d(TAG, "User service connected")
             isUserServiceBound = true
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
+            Log.d(TAG, "User service disconnected")
             userService = null
             isUserServiceBound = false
         }
@@ -95,12 +103,15 @@ class ShizukuService private constructor(private val context: Context) {
             Shizuku.addBinderReceivedListener(binderReceivedListener)
             Shizuku.addBinderDeadListener(binderDeadListener)
             Shizuku.addRequestPermissionResultListener(permissionResultListener)
+
             if (Shizuku.pingBinder()) {
                 isShizukuAvailableAtomic.set(true)
                 checkPermission()
+            } else {
+                isShizukuAvailableAtomic.set(false)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(TAG, "Failed to initialize Shizuku listeners", e)
         }
     }
 
@@ -111,16 +122,17 @@ class ShizukuService private constructor(private val context: Context) {
             Shizuku.removeRequestPermissionResultListener(permissionResultListener)
             unbindUserService()
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(TAG, "Error during Shizuku service cleanup", e)
         }
         listeners.clear()
     }
 
     fun isShizukuInstalled(): Boolean {
         return try {
-            context.packageManager.getPackageInfo("moe.shizuku.privileged.api", 0)
+            val shizukuPackage = Shizuku.getShizukuPackageName()
+            context.packageManager.getPackageInfo(shizukuPackage, 0)
             true
-        } catch (e: PackageManager.NameNotFoundException) {
+        } catch (e: Exception) {
             false
         }
     }
@@ -137,15 +149,15 @@ class ShizukuService private constructor(private val context: Context) {
 
     fun hasPermission(): Boolean {
         return try {
-            if (!isShizukuAvailableAtomic.get()) return false
-            if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
-                hasShizukuPermissionAtomic.set(true)
-                true
-            } else {
-                hasShizukuPermissionAtomic.set(false)
+            if (!isShizukuAvailableAtomic.get()) {
                 false
+            } else {
+                val granted = Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
+                hasShizukuPermissionAtomic.set(granted)
+                granted
             }
         } catch (e: Exception) {
+            hasShizukuPermissionAtomic.set(false)
             false
         }
     }
@@ -159,12 +171,14 @@ class ShizukuService private constructor(private val context: Context) {
             }
         } catch (e: Exception) {
             hasShizukuPermissionAtomic.set(false)
+            Log.e(TAG, "Failed to check Shizuku permission", e)
         }
     }
 
     fun requestPermission() {
         try {
             if (!isShizukuAvailableAtomic.get()) {
+                Log.w(TAG, "Requesting permission when Shizuku is not available.")
                 notifyPermissionResult(false)
                 return
             }
@@ -174,25 +188,29 @@ class ShizukuService private constructor(private val context: Context) {
                 return
             }
             if (Shizuku.shouldShowRequestPermissionRationale()) {
-                // Rationale logic handled by UI
+                Log.d(TAG, "Should show request permission rationale for Shizuku")
             }
             Shizuku.requestPermission(Constants.SHIZUKU_REQUEST_CODE)
+        } catch (e: IllegalStateException) {
+            Log.e(TAG, "Failed to request Shizuku permission, is the activity running?", e)
+            notifyPermissionResult(false)
         } catch (e: Exception) {
+            Log.e(TAG, "Failed to request Shizuku permission", e)
             notifyPermissionResult(false)
         }
     }
 
     fun getConnectionStatus(): ConnectionStatus {
-        val available = isShizukuAvailableAtomic.get() && hasShizukuPermissionAtomic.get()
+        val connected = isShizukuAvailableAtomic.get() && hasShizukuPermissionAtomic.get()
         return ConnectionStatus(
-            isConnected = available,
-            connectionType = if (available) Constants.CONNECTION_TYPE_SHIZUKU else Constants.CONNECTION_TYPE_NONE
+            isConnected = connected,
+            connectionType = if (connected) Constants.CONNECTION_TYPE_SHIZUKU else Constants.CONNECTION_TYPE_NONE
         )
     }
 
     fun executeCommand(command: String, callback: (Boolean, String) -> Unit) {
         if (!isShizukuAvailableAtomic.get() || !hasShizukuPermissionAtomic.get()) {
-            callback(false, "Shizuku unavailable")
+            callback(false, "Shizuku is not available or permission not granted")
             return
         }
         serviceScope.launch {
@@ -202,8 +220,9 @@ class ShizukuService private constructor(private val context: Context) {
                     callback(result.first, result.second)
                 }
             } catch (e: Exception) {
+                Log.e(TAG, "Command execution scope failed", e)
                 withContext(Dispatchers.Main) {
-                    callback(false, e.message ?: "Unknown error")
+                    callback(false, e.message ?: "Unknown error during command execution")
                 }
             }
         }
@@ -211,16 +230,13 @@ class ShizukuService private constructor(private val context: Context) {
 
     private suspend fun executePrivilegedCommand(command: String): Pair<Boolean, String> {
         return withContext(Dispatchers.IO) {
+            var process: Process? = null
             try {
                 val cmdArray = arrayOf("sh", "-c", command)
-                val process = Shizuku.newProcess(cmdArray, null, null)
-                
-                val outputDeferred = async(Dispatchers.IO) {
-                    readStreamFully(process.inputStream)
-                }
-                val errorDeferred = async(Dispatchers.IO) {
-                    readStreamFully(process.errorStream)
-                }
+                process = Shizuku.newProcess(cmdArray, null, null)
+
+                val outputDeferred = async { readStreamFully(process.inputStream) }
+                val errorDeferred = async { readStreamFully(process.errorStream) }
 
                 val exitCode = process.waitFor()
                 val output = outputDeferred.await()
@@ -229,20 +245,24 @@ class ShizukuService private constructor(private val context: Context) {
                 if (exitCode == 0) {
                     Pair(true, output.trim())
                 } else {
-                    Pair(false, errorOutput.ifEmpty { output }.trim())
+                    val errorMessage = errorOutput.ifEmpty { output }.trim()
+                    Log.w(TAG, "Command '$command' failed with exit code $exitCode: $errorMessage")
+                    Pair(false, errorMessage)
                 }
             } catch (e: Exception) {
-                Pair(false, e.message ?: "Execution failed")
+                Log.e(TAG, "Privileged command execution failed for: $command", e)
+                Pair(false, e.message ?: "Execution failed with an exception")
+            } finally {
+                process?.destroy()
             }
         }
     }
 
     private fun readStreamFully(inputStream: InputStream): String {
         return try {
-            inputStream.bufferedReader(StandardCharsets.UTF_8).use { reader ->
-                reader.readText()
-            }
+            inputStream.bufferedReader(StandardCharsets.UTF_8).use { it.readText() }
         } catch (e: Exception) {
+            Log.e(TAG, "Failed to read stream", e)
             ""
         }
     }
@@ -251,43 +271,50 @@ class ShizukuService private constructor(private val context: Context) {
         if (!isShizukuAvailableAtomic.get() || !hasShizukuPermissionAtomic.get()) {
             return ""
         }
+        var process: Process? = null
         return try {
             val cmdArray = arrayOf("sh", "-c", command)
-            val process = Shizuku.newProcess(cmdArray, null, null)
-            
-            process.inputStream.bufferedReader(StandardCharsets.UTF_8).use { reader ->
-                val output = reader.readText()
-                process.waitFor()
-                output.trim()
-            }
+            process = Shizuku.newProcess(cmdArray, null, null)
+
+            val output = process.inputStream.bufferedReader(StandardCharsets.UTF_8).use { it.readText() }
+            process.waitFor()
+            output.trim()
         } catch (e: Exception) {
+            Log.e(TAG, "Shell command failed for: $command", e)
             ""
+        } finally {
+            process?.destroy()
         }
     }
 
     fun getSurfaceFlingerFps(): Int {
-        return try {
+        try {
             val output = executeShellCommand("service call SurfaceFlinger 1013")
-            parseFpsFromSurfaceFlinger(output)
+            if (output.isNotBlank()) {
+                return parseFpsFromSurfaceFlinger(output)
+            }
         } catch (e: Exception) {
-            0
+            Log.e(TAG, "Failed to get SurfaceFlinger FPS", e)
         }
+        return 0
     }
 
     fun getFrameStats(packageName: String): String {
-        return try {
-            executeShellCommand("dumpsys gfxinfo $packageName framestats")
+        try {
+            return executeShellCommand("dumpsys gfxinfo $packageName framestats")
         } catch (e: Exception) {
-            ""
+            Log.e(TAG, "Failed to get frame stats for $packageName", e)
+            return ""
         }
     }
 
     fun getTopActivity(): String {
-        return try {
+        try {
             val output = executeShellCommand("dumpsys activity activities | grep mResumedActivity")
-            parseTopActivity(output)
+            return parseTopActivity(output)
         } catch (e: Exception) {
-            ""
+            Log.e(TAG, "Failed to get top activity", e)
+            return ""
         }
     }
 
@@ -296,32 +323,38 @@ class ShizukuService private constructor(private val context: Context) {
             val output = executeShellCommand("dumpsys activity recents | grep 'Recent #'")
             parseRunningApps(output)
         } catch (e: Exception) {
+            Log.e(TAG, "Failed to get running apps", e)
             emptyList()
         }
     }
 
     private fun parseFpsFromSurfaceFlinger(output: String): Int {
         return try {
-            val hexPattern = Regex("Result:\\s*Parcel\\(([0-9a-fA-F]+)\\s+([0-9a-fA-F]+).*\\)")
+            val hexPattern = Regex("Result:\\s*Parcel\\(.+\\s'([0-9a-fA-F]+)'.*\\)")
             val match = hexPattern.find(output)
-            if (match != null && match.groupValues.size >= 3) {
-                val hexString = match.groupValues[2]
+            if (match != null && match.groupValues.size > 1) {
+                val hexString = match.groupValues[1]
                 val longValue = hexString.toLongOrNull(16) ?: 0L
                 (longValue and 0xFFFFFFFF).toInt()
             } else {
                 0
             }
+        } catch (e: NumberFormatException) {
+            Log.e(TAG, "Failed to parse hex string from SurfaceFlinger output", e)
+            0
         } catch (e: Exception) {
+            Log.e(TAG, "Failed to parse FPS from SurfaceFlinger", e)
             0
         }
     }
 
     private fun parseTopActivity(output: String): String {
         return try {
-            val componentPattern = Regex("([a-zA-Z0-9_.]+)/([a-zA-Z0-9_.]+)")
+            val componentPattern = Regex("mResumedActivity:\\s*ActivityRecord\\{.*\\s([^/ ]+)/([^ ]+)\\s.*}")
             val match = componentPattern.find(output)
             match?.groupValues?.getOrNull(1) ?: ""
         } catch (e: Exception) {
+            Log.e(TAG, "Failed to parse top activity", e)
             ""
         }
     }
@@ -331,6 +364,7 @@ class ShizukuService private constructor(private val context: Context) {
             val packagePattern = Regex("A=([a-zA-Z0-9_.]+)")
             packagePattern.findAll(output).mapNotNull { it.groupValues.getOrNull(1) }.toList()
         } catch (e: Exception) {
+            Log.e(TAG, "Failed to parse running apps", e)
             emptyList()
         }
     }
@@ -346,7 +380,7 @@ class ShizukuService private constructor(private val context: Context) {
                     false
                 )
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "Failed to unbind user service", e)
             }
             isUserServiceBound = false
         }
@@ -366,7 +400,7 @@ class ShizukuService private constructor(private val context: Context) {
                 try {
                     listener.onShizukuAvailabilityChanged(available)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e(TAG, "Listener failed during onShizukuAvailabilityChanged", e)
                 }
             }
         }
@@ -378,7 +412,7 @@ class ShizukuService private constructor(private val context: Context) {
                 try {
                     listener.onShizukuPermissionResult(granted)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e(TAG, "Listener failed during onShizukuPermissionResult", e)
                 }
             }
         }
@@ -390,7 +424,7 @@ class ShizukuService private constructor(private val context: Context) {
                 try {
                     listener.onConnectionStatusChanged(status)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e(TAG, "Listener failed during onConnectionStatusChanged", e)
                 }
             }
         }
@@ -400,12 +434,11 @@ class ShizukuService private constructor(private val context: Context) {
         override fun executeCommand(command: String): String {
             return try {
                 val process = Runtime.getRuntime().exec(arrayOf("sh", "-c", command))
-                process.inputStream.bufferedReader(StandardCharsets.UTF_8).use { reader ->
-                    val output = reader.readText()
-                    process.waitFor()
-                    output
-                }
+                val output = process.inputStream.bufferedReader(StandardCharsets.UTF_8).use { it.readText() }
+                process.waitFor()
+                output
             } catch (e: Exception) {
+                Log.e(TAG, "Failed to execute command in user service", e)
                 ""
             }
         }
@@ -414,6 +447,8 @@ class ShizukuService private constructor(private val context: Context) {
     }
 
     companion object {
+        private const val TAG = "ShizukuService"
+
         @Volatile
         private var instance: ShizukuService? = null
 
@@ -425,7 +460,7 @@ class ShizukuService private constructor(private val context: Context) {
             }
         }
 
-        fun getShizukuVersion(context: Context): Int {
+        fun getShizukuVersion(): Int {
             return try {
                 if (Shizuku.pingBinder()) Shizuku.getVersion() else -1
             } catch (e: Exception) {
