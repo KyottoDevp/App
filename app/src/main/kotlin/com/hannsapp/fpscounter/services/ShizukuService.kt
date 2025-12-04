@@ -215,8 +215,13 @@ class ShizukuService private constructor(private val context: Context) {
     private suspend fun executePrivilegedCommand(command: String): Pair<Boolean, String> {
         return withContext(Dispatchers.IO) {
             try {
-                // CORRIGIDO: Chamada direta para Shizuku.newProcess
-                val process = Shizuku.newProcess(arrayOf("sh", "-c", command), null, null)
+                // CORRIGIDO: Usar Shizuku.getBinder() com ShizukuBinderWrapper
+                val binder = Shizuku.getBinder()
+                if (binder == null || !binder.isBinderAlive) {
+                    return@withContext Pair(false, "Shizuku binder not available")
+                }
+                
+                val process = ShizukuBinderWrapper(binder).newProcess(arrayOf("sh", "-c", command), null, null)
                 val reader = BufferedReader(InputStreamReader(process.inputStream))
                 val errorReader = BufferedReader(InputStreamReader(process.errorStream))
 
@@ -253,8 +258,13 @@ class ShizukuService private constructor(private val context: Context) {
         }
 
         return try {
-            // CORRIGIDO: Chamada direta para Shizuku.newProcess
-            val process = Shizuku.newProcess(arrayOf("sh", "-c", command), null, null)
+            // CORRIGIDO: Usar Shizuku.getBinder() com ShizukuBinderWrapper
+            val binder = Shizuku.getBinder()
+            if (binder == null || !binder.isBinderAlive) {
+                return ""
+            }
+            
+            val process = ShizukuBinderWrapper(binder).newProcess(arrayOf("sh", "-c", command), null, null)
             val reader = BufferedReader(InputStreamReader(process.inputStream))
             val output = StringBuilder()
             var line: String?
