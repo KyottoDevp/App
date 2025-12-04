@@ -29,47 +29,46 @@ jobs:
 
       - name: Instalar Android SDK
         run: |
-          sudo apt update
-          sudo apt install -y wget unzip
-
           mkdir -p $ANDROID_HOME/cmdline-tools
-
+          
           wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O sdk.zip
-          unzip sdk.zip -d $ANDROID_HOME/cmdline-tools
-
+          unzip -q sdk.zip -d $ANDROID_HOME/cmdline-tools
+          
+          # Renomeia para o caminho esperado 'latest'
           mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
           
-          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
-
+          # Adiciona as ferramentas do SDK ao PATH do sistema
           echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
           echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
-
-          yes | $SDKMANAGER --licenses
-          $SDKMANAGER "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          
+          # Aceita as licenças e instala os pacotes necessários
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" > /dev/null
 
       - name: Dar permissão ao Gradle
         run: chmod +x ./gradlew
 
       - name: Restaurar Keystore
         run: |
-          echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > release-key.jks
+          echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > app/release-key.jks
 
       - name: Rodar testes
         run: |
           unset ANDROID_SDK_ROOT
-          ./gradlew test --stacktrace --info
+          ./gradlew test --stacktrace
 
       - name: Upload Relatórios de Teste
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: relatorios-de-teste
-          path: app/build/test-results/test
+          path: app/build/reports/tests/testDebugUnitTest/
+          if-no-files-found: warn
 
       - name: Build Debug
         run: |
           unset ANDROID_SDK_ROOT
-          ./gradlew assembleDebug --stacktrace --info
+          ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK Debug
         uses: actions/upload-artifact@v4
@@ -81,13 +80,13 @@ jobs:
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }} # Adicione esta variável se a senha da chave for diferente da senha do keystore
         run: |
           unset ANDROID_SDK_ROOT
-          ./gradlew assembleRelease --stacktrace --info
+          ./gradlew assembleRelease --stacktrace
 
       - name: Upload APK Release
         uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: app/build/outputs/apk/release/*.apk
-          
