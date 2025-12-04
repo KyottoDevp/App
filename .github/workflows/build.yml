@@ -55,7 +55,9 @@ jobs:
           echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > release-key.jks
 
       - name: Rodar testes
-        run: ./gradlew test --stacktrace --info
+        run: |
+          unset ANDROID_SDK_ROOT
+          ./gradlew test --stacktrace --info
 
       - name: Upload Relatórios de Teste
         if: always()
@@ -65,7 +67,9 @@ jobs:
           path: app/build/test-results/test
 
       - name: Build Debug
-        run: ./gradlew assembleDebug --stacktrace --info
+        run: |
+          unset ANDROID_SDK_ROOT
+          ./gradlew assembleDebug --stacktrace --info
 
       - name: Upload APK Debug
         uses: actions/upload-artifact@v4
@@ -77,7 +81,9 @@ jobs:
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-        run: ./gradlew assembleRelease --stacktrace --info
+        run: |
+          unset ANDROID_SDK_ROOT
+          ./gradlew assembleRelease --stacktrace --info
 
       - name: Upload APK Release
         uses: actions/upload-artifact@v4
