@@ -215,7 +215,7 @@ class ShizukuService private constructor(private val context: Context) {
     private suspend fun executePrivilegedCommand(command: String): Pair<Boolean, String> {
         return withContext(Dispatchers.IO) {
             try {
-                val process = Shizuku.newProcess(arrayOf("sh", "-c", command), null, null)
+                val process = ShizukuBinderWrapper(Shizuku.getService()).newProcess(arrayOf("sh", "-c", command), null, null)
                 val reader = BufferedReader(InputStreamReader(process.inputStream))
                 val errorReader = BufferedReader(InputStreamReader(process.errorStream))
 
@@ -252,7 +252,7 @@ class ShizukuService private constructor(private val context: Context) {
         }
 
         return try {
-            val process = Shizuku.newProcess(arrayOf("sh", "-c", command), null, null)
+            val process = ShizukuBinderWrapper(Shizuku.getService()).newProcess(arrayOf("sh", "-c", command), null, null)
             val reader = BufferedReader(InputStreamReader(process.inputStream))
             val output = StringBuilder()
             var line: String?
