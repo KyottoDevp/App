@@ -2,22 +2,61 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ]        # Executa em cada push para a branch main
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" ]        # Executa também em PRs para main
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest      # Runner mais atualizado (Ubuntu 24.04 LTS)
 
     steps:
+      # -----------------------------
+      # 1. Checkout do código fonte
+      # -----------------------------
       - name: Checkout código
-        uses: actions/checkout@v3
-
-      - name: Configurar Java
-        uses: actions/setup-java@v3
+        uses: actions/checkout@v4
         with:
-          java-version: '17'
+          fetch-depth: 0        # Pega histórico completo (útil para versionamento)
 
+      # -----------------------------
+      # 2. Configuração do JDK
+      # -----------------------------
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: gradle         # Habilita cache para builds mais rápidos
+
+      # -----------------------------
+      # 3. Build com Gradle
+      # -----------------------------
       - name: Build com Gradle
-        run: ./gradlew build
+        run: ./gradlew build --stacktrace --info
+
+      # -----------------------------
+      # 4. Testes automatizados
+      # -----------------------------
+      - name: Executar testes
+        run: ./gradlew test --stacktrace --info
+
+      # -----------------------------
+      # 5. Upload de relatórios de teste (JUnit)
+      # -----------------------------
+      - name: Upload relatórios de teste
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatórios-de-teste
+          path: build/test-results/test
+
+      # -----------------------------
+      # 6. Upload de relatórios de cobertura (Jacoco)
+      # -----------------------------
+      - name: Upload cobertura de código
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura-codigo
+          path: build/reports/jacoco/test/html
